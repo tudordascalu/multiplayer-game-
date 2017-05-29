@@ -1,9 +1,11 @@
-![Screenshot](playing.jpeg)
+![Screenshot](1st_screenshot.jpeg)
 # Multiplayer-Game
 A rock paper scissors multiplayer game made with NodeJS.
 
 # Features
 A very simple and nicely designed game built with web sockets.
+
+![Screenshot](2nd_screenshot.jpeg)
 
 # Technologies
 * NodeJS - JavaScript backend/server-side solution of choice
@@ -22,12 +24,15 @@ A very simple and nicely designed game built with web sockets.
 
 * Bootstrap - CSS/JS framework, makes it easy to develop responsive, well polished web apps
 
+![Screenshot](playing.jpeg)
 
 #How it works
 
 Once you insert a username which is not being used the server is going to try to find you an oponent.
 
 After finding an oponent you will be able to choose between "rock", "paper" and "scissors". The score is displayed on the right corner of the screen and you can also check out other's people score by clicking on the human icon in the upper part of the screen.
+
+![Screenshot](players.jpeg)
 
 #Motivation
 

@@ -5,7 +5,7 @@ A rock paper scissors multiplayer game made with NodeJS.
 # Features
 A very simple and nicely designed game built with web sockets.
 
-![Screenshot](2nd_screenshot.jpeg)
+![Screenshot](2nd_screenshot.png)
 
 # Technologies
 * NodeJS - JavaScript backend/server-side solution of choice

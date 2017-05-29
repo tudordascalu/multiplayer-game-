@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Rock Paper Scissors</title>
+	<script src="https://use.fontawesome.com/6118c30a46.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<style>
+
+	*{
+		margin: 0px;
+		padding: 0px;
+		box-sizing: border-box;
+	}
+
+	.container{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-content: center;
+		width: 100vw;
+		height: 100vh;
+	}
+
+	#lblNickname{
+		display: flex;
+		justify-content: center;
+		width: 50vw;
+		height: 10vh;
+		font-size: 50px;
+		text-align: center;
+		align-self: center;
+	}
+
+	#btnJoin{
+		opacity: 1;
+		display: flex;
+		align-self: center;
+		margin-top:10px;
+		transition: 1s;
+	}
+
+	#btnJoin:hover{
+
+		background: #F44336;
+	}
+
+	
+	#icons{
+
+		 	opacity: 0;
+			transition: 2s;
+			margin-top: 100px;
+			display: flex;
+			justify-content: space-around;
+			
+}
+
+		.feedback-container{
+			text-align:center;
+			margin-bottom: 100px;
+		}
+
+		#lblFeedback{
+			font-size:6vh;
+		}
+
+
+	.score-box{
+			opacity: 0;
+			box-sizing: border-box;
+			position: absolute;
+			margin-top:10px;
+			margin-right: 10px;
+			top:0;
+			right: 0;
+			border: 1px black solid;
+			width: 8vh;
+			height: 8vh;
+			
+			text-align: center;
+
+			justify-content: flex-end;
+
+		}
+		.lblScore{
+			font-size: 6vh;
+		}
+		.btnModal{
+			opacity: 1;
+		display: flex;
+		align-self: center;
+		margin-top:10px;
+		transition: 1s;
+		}
+
+		.iModal{
+			opacity: 1;
+			display: flex;
+			align-self: center;
+			margin-top:10px;
+			transition: 1s;
+
+		}
+		.iModal:hover{
+			color:#F44336;
+		}
+
+
+	</style>
+</head>
+<body>
+	
+		<div id="myModal" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Online Players</h4>
+	      </div>
+	      <div class="modal-body online-players">
+	        <p>AND</p>
+	        <p>MIH</p>
+	      </div>
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Matches</h4>
+	      </div>
+	      <div class="modal-body matches">
+	        <p>TUDOR-DANIELA</p>
+	        <P>ANDREI-MIHAI</P>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	    </div>
+	    </div>
+
+
+<div class="container">
+	
+    <i class="iModal fa fa-user fa-5x" aria-hidden="true"></i>
+
+	<div class="score-box">
+		<label class="lblScore">0</label>
+	</div>
+	<div class="feedback-container">
+		<label id="lblFeedback"></label>
+	</div>
+	<input id="lblNickname" type="text" name="txtNickname" placeholder="Nickname">
+	<button type="button" id="btnJoin" class="btn btn-primary btn-lg">JOIN</button>
+
+
+<div id="icons">
+		<div>
+			<i id="rock" class="fa fa-hand-rock-o fa-5x"></i>
+		</div>
+		<div>	
+			<i id="paper" class="fa fa-hand-paper-o fa-5x"></i>
+		</div>	
+		<div>
+			<i id="scissor" class="fa fa-hand-scissors-o fa-5x"></i>
+		</div>
+	</div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.slim.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script>
+	
+
+	var socket = io("localhost:8000");
+
+	$(".iModal").click(function(){
+		socket.emit("send players and matches", {});
+		socket.on("players and matches", function(jData){
+			var players = jData.players;
+			if(players.length<1){ 
+				$(".online-players").empty();
+				$(".online-players").append("<p>No players</p>");			}
+			else{
+				$(".online-players").empty();
+				for(var i=0; i<players.length; i++){
+					$(".online-players").append("<p>"+players[i]+"</p>");
+				}
+			}
+
+			var matches = jData.matches;
+
+			if(matches.length<1){
+				$(".matches").empty();
+				$(".matches").append("<p>No matches</p>");
+
+			}	
+			else{
+				$(".matches").empty();
+				for(var i=0; i<matches.length;i++){
+					$(".matches").append("<p>"+matches[i]+"</p>")
+				}
+			}
+		})
+
+		$("#myModal").modal("show");
+
+	})
+	$("#btnJoin").click(function(){
+		var sNickname = $("#lblNickname").val();
+		console.log(sNickname);
+		//send nickname to server
+		socket.emit("player wants to join", {"nickname": sNickname});
+	})
+
+	$("#rock").click(function(){
+		socket.emit("player choice", {"choice":"rock"});
+	})
+
+	$("#paper").click(function(){
+		socket.emit("player choice", {"choice":"paper"});
+	})
+
+	$("#scissor").click(function(){
+		socket.emit("player choice", {"choice":"scissor"});
+	})
+
+
+	socket.on("player joining", function(jData){
+		console.log(jData);
+		if(jData.status == "ok"){
+			// css animation		
+
+			$("#btnJoin").attr({"disabled":true});
+			$("#lblFeedback").html($("#lblNickname").val() + " - " + "...");
+		}
+		else{
+			$("#lblFeedback").html("The nickname is already being used!");
+		}
+	})
+
+	socket.on("finding oponent", function(jData){
+		
+		$("#lblFeedback").html($("#lblNickname").val() + " - " + jData.nickname);
+		$("#icons").css({"opacity":1});
+		$("#btnJoin").css({"opacity":0});
+		$(".score-box").css({"opacity":1});
+		$(".lblScore").html(0);
+	})
+
+
+	socket.on("status", function(jData){
+		console.log(jData.status);
+		if(jData.status == "won")
+		{
+			$("body").css({"background":"green"});
+		}
+
+		if(jData.status == "lost"){
+			$("body").css({"background":"red"});
+		}
+
+		if(jData.status == "even"){
+			$("body").css({"background":"yellow"});
+		}
+
+		if(jData.status == "waiting for your answer"){
+			$("body").css({"background":"#ADD8E6"});
+		}
+
+		if(jData.status == "waiting for oponent"){
+			$("body").css({"background":"#ADD8E6"});
+		}
+	})
+
+	socket.on("oponent left", function(jData){
+		console.log("oponent has left");
+		$("body").css({"background":"white"});
+  		$("#lblFeedback").html($("#lblNickname").val() + " - ...");
+  		$("#icons").css({"opacity":0});
+  		$(".score-box").css({"opacity":0});
+	})
+
+	socket.on("won", function(jData){
+		$(".lblScore").html(jData.won);
+	})
+
+	$(window).on("beforeunload", function() { 
+  		socket.emit("window closed", {"status":"window closed"}); 
+	})
+
+
+
+</script>
+</body>
+</html>

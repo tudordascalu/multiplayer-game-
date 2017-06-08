@@ -1,4 +1,4 @@
-![Screenshot](chat-pictures/all-users.jpeg)
+![Screenshot](1st_screenshot.jpeg)
 # Multiplayer-Game
 A rock paper scissors multiplayer game made with NodeJS.
 
